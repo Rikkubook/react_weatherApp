@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles.css"],"names":[],"mappings":"AAAA,UAEE,QAAS,CACT,SAGF,CAEA,gBAJE,WAAY,CACZ,UAMF","file":"main.8658ad04.chunk.css","sourcesContent":["html,\r\nbody {\r\n  margin: 0;\r\n  padding: 0;\r\n  height: 100%;\r\n  width: 100%;\r\n}\r\n\r\n#root {\r\n  height: 100%;\r\n  width: 100%;\r\n}\r\n"]}
