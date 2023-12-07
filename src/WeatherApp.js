@@ -4,8 +4,8 @@ import { ThemeProvider } from "@emotion/react";
 
 import WeatherCard from "./WeatherCard";
 import WeatherSetting from "./WeatherSetting";
-import { findLocation } from "./utils";
-import useWeatherApi from "./GetWeatherApi";
+import useFindLocation from "./composable/UseFindLocation";
+import useWeatherApi from "./composable/UseWeatherApi";
 
 // 主題色
 const theme = {
@@ -40,8 +40,9 @@ const WeatherApp = () => {
   // 控制氣象資料
   const storageCity = localStorage.getItem("cityName");
   const [currentCity, setCurrentCity] = useState(storageCity || "臺北市");
-  const currentLocation = findLocation(currentCity) || {};
 
+  const {findLocation} =  useFindLocation()
+  const currentLocation = findLocation(currentCity) || {};
   const [weatherElement, fetchData] = useWeatherApi(currentLocation);
 
   // 控制日夜
@@ -52,7 +53,7 @@ const WeatherApp = () => {
     const month = newDay.getMonth();
     const date = newDay.getDate();
     const today = `${year}-${month + 1}-${date}`;
-    const url = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-8583E89C-3360-42FB-BF91-D8F92910550F&limit=1&format=JSON&locationName=${locationName}&dataTime=${today}`;
+    const url = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-8583E89C-3360-42FB-BF91-D8F92910550F&limit=1&format=JSON&locationName=${locationName}&Date=${today}`;
 
     return fetch(url)
       .then((response) => response.json())
@@ -60,21 +61,10 @@ const WeatherApp = () => {
         if (data.records.locations.location.length === 0) {
           return null;
         } else {
-          const locationData =
-            data.records.locations.location[0].time[0].parameter;
-          let sunriseTimestamp = "";
-          let sunsetTimestamp = "";
-          locationData.forEach((item) => {
-            if (item.parameterName === "日出時刻") {
-              sunriseTimestamp = new Date(
-                `${today} ${item.parameterValue}`
-              ).getTime();
-            } else if (item.parameterName === "日沒時刻") {
-              sunsetTimestamp = new Date(
-                `${today} ${item.parameterValue}`
-              ).getTime();
-            }
-          });
+          const locationData = data.records.locations.location[0].time[0];
+
+          const sunriseTimestamp = new Date(`${today} ${locationData.SunRiseTime}`).getTime();
+          const sunsetTimestamp = new Date(`${today} ${locationData.SunSetTime}`).getTime();;
           const nowTimeStamp = newDay.getTime();
           return sunriseTimestamp <= nowTimeStamp &&
             nowTimeStamp <= sunsetTimestamp

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { availableLocations } from "./utils";
+import useFindLocation from "./composable/UseFindLocation";
 
 const WeatherSettingWrapper = styled.div`
   position: relative;
@@ -88,6 +88,8 @@ const Save = styled.button`
   }
 `;
 
+const {availableLocations} = useFindLocation()
+
 const locations = availableLocations.map((location) => location.cityName);
 
 // STEP 1：從 props 中取出 setCurrentPage 方法
@@ -96,7 +98,7 @@ const WeatherSetting = (props) => {
   const [locationName, setLocationName] = useState(cityName);
 
   const handleChange = (e) => {
-    console.log(e.target.value);
+
     setLocationName(e.target.value);
   };
 
@@ -110,7 +112,6 @@ const WeatherSetting = (props) => {
   };
   return (
     <WeatherSettingWrapper>
-      {console.log("render")}
       <Title>設定</Title>
       <StyledLabel htmlFor="location">地區</StyledLabel>
       <StyledInputList
