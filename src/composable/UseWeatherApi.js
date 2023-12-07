@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+const apiKey = process.env.REACT_APP_API_KEY;
 
 const fetchWeatherForecase = (cityName) => {
   return fetch(
-    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=CWB-8583E89C-3360-42FB-BF91-D8F92910550F&locationName=${cityName}`
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-C0032-001?Authorization=${apiKey}&locationName=${cityName}`
   )
     .then((response) => response.json())
     .then((data) => {
@@ -25,7 +26,7 @@ const fetchWeatherForecase = (cityName) => {
 };
 const fetchCurrentWeather = (locationName) => {
   return fetch(
-    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=CWB-8583E89C-3360-42FB-BF91-D8F92910550F`
+    `https://opendata.cwb.gov.tw/api/v1/rest/datastore/O-A0003-001?Authorization=${apiKey}`
   )
     .then((response) => response.json())
     .then((data) => {

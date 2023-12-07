@@ -7,6 +7,8 @@ import WeatherSetting from "./WeatherSetting";
 import useFindLocation from "./composable/UseFindLocation";
 import useWeatherApi from "./composable/UseWeatherApi";
 
+const apiKey = process.env.REACT_APP_API_KEY;
+
 // 主題色
 const theme = {
   light: {
@@ -45,6 +47,7 @@ const WeatherApp = () => {
   const currentLocation = findLocation(currentCity) || {};
   const [weatherElement, fetchData] = useWeatherApi(currentLocation);
 
+  
   // 控制日夜
   const [moment, setMoment] = useState("day");
   const fetchMoment = (locationName) => {
@@ -53,7 +56,7 @@ const WeatherApp = () => {
     const month = newDay.getMonth();
     const date = newDay.getDate();
     const today = `${year}-${month + 1}-${date}`;
-    const url = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=CWB-8583E89C-3360-42FB-BF91-D8F92910550F&limit=1&format=JSON&locationName=${locationName}&Date=${today}`;
+    const url = `https://opendata.cwb.gov.tw/api/v1/rest/datastore/A-B0062-001?Authorization=${apiKey}&limit=1&format=JSON&locationName=${locationName}&Date=${today}`;
 
     return fetch(url)
       .then((response) => response.json())
